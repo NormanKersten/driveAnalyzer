@@ -1,0 +1,2 @@
+# File to force not showing HTML as repo language
+*.html linguist-detectable=false
