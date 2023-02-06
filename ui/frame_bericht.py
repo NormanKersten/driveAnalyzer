@@ -5,17 +5,19 @@ import tkinter as tk
 import zipfile
 from tkinter import ttk, messagebox
 from tkinter.messagebox import askyesno
+
 import numpy as np
 from PIL import Image
+from PyPDF2 import PdfMerger
 from matplotlib import pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.ticker import AutoMinorLocator
 from nptdms import TdmsFile
+from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
+
 from app import MessungInfo
-from matplotlib.backends.backend_pdf import PdfPages
-from reportlab.lib.pagesizes import A4, landscape
-from PyPDF2 import PdfMerger
 
 
 class BerichtFrame(ttk.Frame):
@@ -157,6 +159,10 @@ class BerichtFrame(ttk.Frame):
             zyklen_bis_legende[2] = zyklen_bis[2]
             zyklen_von_legende[2] = zyklen_von[2] + 1
 
+            # Nutzung von memory mapped numpy arrays
+            # with tempfile.TemporaryDirectory() as temp_memmap_dir:
+            #     tdms_file = TdmsFile.read(messung_bericht_report.pfad, memmap_dir=temp_memmap_dir)
+
             tdms_file = TdmsFile.read(messung_bericht_report.pfad)
             # Informationen aus Messung holen und im Objekt speichern
             group_zyklus = tdms_file["Zyklus"]
@@ -233,7 +239,6 @@ class BerichtFrame(ttk.Frame):
 
             # Abbildung 2 mit drei Diagrammen für Drehmoment und Drehzahl für drei Bereiche
             # Basisobjekt für die Diagramme, mit von Anzahl Diagramme abhängiger Größe
-            print(datetime.datetime.now())
             fig_2 = plt.figure()
             fig_2.set_figwidth(self.fig_width)
             fig_2.set_figheight(self.fig_height)
@@ -296,7 +301,6 @@ class BerichtFrame(ttk.Frame):
                 t_n.grid()
                 t_n.grid(which="minor", linestyle='--')
 
-            print(datetime.datetime.now())
             # Abbildung 3 mit drei Diagrammen mit den Temperaturen für drei Bereiche
             # Basisobjekt für die Diagramme, mit von Anzahl Diagramme abhängiger Größe
             fig_3 = plt.figure()
@@ -341,7 +345,6 @@ class BerichtFrame(ttk.Frame):
                 temp.grid()
                 temp.grid(which="minor", linestyle='--')
 
-            print(datetime.datetime.now())
             # Schließen der TDMS-Datei
             tdms_file.close()
             # Statusbar auf OK setzen
@@ -350,10 +353,12 @@ class BerichtFrame(ttk.Frame):
             fig_1.tight_layout()
             fig_2.tight_layout()
             fig_3.tight_layout()
-            # plt.show()
 
-            # Diagramme als PDF speichern
-            self._abbildung_speichern(messung_bericht_report)
+            # Diagramme in Liste speichern, als PDF drucken und aus dem Speicher entfernen
+            figures = (fig_1, fig_2, fig_3)
+            self._abbildung_speichern(messung_bericht_report, figures)
+            for fig in figures:
+                plt.close(fig)
             # Deckblatt zum Bericht erstellen und speichern
             self._deckblatt_bericht(messung_bericht_report)
             # Bericht zusammenfügen
@@ -389,7 +394,7 @@ class BerichtFrame(ttk.Frame):
         deckblatt.line(w - w + 200, h - 60, w - 200, h - 60)
         # Nutzung der python PIL Image Bibliothek
         feig_logo = ImageReader(
-            Image.open("resources\\feig_logo.png"))
+            Image.open("C:\\Users\\Familie_Kersten\\PycharmProjects\\driveAnalyzer\\resources\\feig_logo.png"))
         # "resources\\feig_logo.png"
         # "C:\\Users\\Familie_Kersten\\PycharmProjects\\driveAnalyzer\\resources\\feig_logo.png"
         deckblatt.drawImage(feig_logo, 710, h - 120, width=100, preserveAspectRatio=True, mask="auto")
@@ -436,20 +441,14 @@ class BerichtFrame(ttk.Frame):
         deckblatt.save()
 
     @staticmethod
-    def _abbildung_speichern(messung):
+    def _abbildung_speichern(messung, figures):
         # Pfad und Dateiname der PDF-Dateien für den Bericht, sodass PDF im Zielpfad der Messung abgelegt wird
         pdf_dateiname_diagramme = f"{messung.pfad.rsplit('.', 1)[0]}_Bericht_Diagramme.pdf"
         # Objekt von PdfPages erzeugen
         pdf_abb = PdfPages(pdf_dateiname_diagramme)
-        # Anzahl der Abbildungen holen und in Liste speichern
-        fig_nums = plt.get_fignums()
-        figs = [plt.figure(n) for n in fig_nums]
         # Durch die Liste iterieren und Abbildungen im PDF speichern
-        for fig in figs:
+        for fig in figures:
             fig.savefig(pdf_abb, format='pdf')
-            # Abbildungen löschen, da sonst noch im Speicher und diese beim nächsten Aufruf im nächsten
-            # PDF gespeichert werden
-            plt.close(fig)
 
         # Objekt wieder schließen
         pdf_abb.close()
@@ -479,8 +478,13 @@ class BerichtFrame(ttk.Frame):
 
         # Temporäre PDF-Dateien löschen
         if os.path.exists(pdf_dateiname_bericht):
-            os.remove(pdf_dateiname_deckblatt)
-            os.remove(pdf_dateiname_diagramme)
+            try:
+                os.remove(pdf_dateiname_deckblatt)
+                os.remove(pdf_dateiname_diagramme)
+            except OSError:
+                print(OSError)
+                messagebox.showwarning("Bericht", f"Die temporären PDF-Dateien {pdf_dateiname_deckblatt} "
+                                                  f"und/oder {pdf_dateiname_diagramme} konnten nicht gelöscht werden.")
 
         # Anwender benachrichtigen
         messagebox.showinfo("Bericht", f"Der Bericht wurde erfolgreich erstellt und gespeichert:\n"
@@ -502,4 +506,4 @@ class BerichtFrame(ttk.Frame):
         # Statusbar zurücksetzen und Benutzer informieren
         self.controller.status_ok()
         messagebox.showinfo("Bericht", f"Die TDMS-Datei wurde erfolgreich archiviert:\n"
-                            f"{zip_dateiname}")
+                                       f"{zip_dateiname}")

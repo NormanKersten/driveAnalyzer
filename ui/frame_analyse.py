@@ -329,7 +329,7 @@ class AnalyseFrame(ttk.Frame):
                         temp.grid(which="minor", linestyle='--')
 
                 # Schließen der TDMS-Datei
-                tdms_file.close()
+                # tdms_file.close()
                 # Statusbar auf OK setzen
                 self.controller.status_ok()
                 # Diagramme einpassen und anzeigen
@@ -376,7 +376,8 @@ class AnalyseFrame(ttk.Frame):
                 zyklen_bis_legende = (self.sb_1_v_bis.get(), self.sb_2_v_bis.get(), self.sb_3_v_bis.get())
             else:
                 messagebox.showwarning("Achtung", f"Bitte Eingaben für die Zyklen korrigieren. \n"
-                                                  f"Es sind nur Zyklen von 1 bis {messung_analyse_analog.zyklen} gültig.")
+                                                  f"Es sind nur Zyklen von 1 bis {messung_analyse_analog.zyklen} "
+                                                  f"gültig.")
                 return
 
             # Buttons für weitere Diagramme sperren
@@ -393,12 +394,13 @@ class AnalyseFrame(ttk.Frame):
                     # Informationen aus Messung holen und im Objekt speichern
                     group_zyklus = tdms_file["Zyklus"]
                     channel_zyklus_zeit = group_zyklus["Zeit"]
+                    group_analog = tdms_file["Analog"]
+                    channel_analog_zeit = group_analog["Zeit"]
+                    group_temperatur = tdms_file["Temperatur"]
+                    channel_temperatur_zeit = group_temperatur["Zeit"]
 
                     # Falls Kanäle für Drehmoment/Drehzahl ausgewählt wurden
                     if liste_t_n:
-                        # Informationen aus Messung holen und im Objekt speichern
-                        group_analog = tdms_file["Analog"]
-                        channel_analog_zeit = group_analog["Zeit"]
                         # Basisobjekt für die Diagramme, mit von Anzahl Diagramme abhängiger Größe
                         fig_1 = plt.figure()
                         fig_1.set_figwidth(12)
@@ -452,10 +454,8 @@ class AnalyseFrame(ttk.Frame):
                         # Diagramm in neuem Fenster darstellen
                         self._plot_in_window(fig_1)
 
+                    # Falls Kanäle für Temperaturen ausgewählt wurden
                     if liste_temperaturen:
-                        # Informationen aus Messung holen und im Objekt speichern
-                        group_temperatur = tdms_file["Temperatur"]
-                        channel_temperatur_zeit = group_temperatur["Zeit"]
                         # Basisobjekt für die Diagramme, mit von Anzahl Diagramme abhängiger Größe
                         fig_2 = plt.figure()
                         fig_2.set_figwidth(12)
@@ -506,8 +506,6 @@ class AnalyseFrame(ttk.Frame):
                         # Diagramm in neuem Fenster darstellen
                         self._plot_in_window(fig_2)
 
-                # Schließen der TDMS-Datei
-                tdms_file.close()
                 # Statusbar auf OK setzen
                 self.controller.status_ok()
 

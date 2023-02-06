@@ -18,4 +18,5 @@ class DriveAnalyzerVersion:
 
     def _update_change_log(self):
         self.change_log.update({"V0.3 vom 04-02-2023": "Testversion"})
+        self.change_log.update({"V0.4 vom 06-02-2023": "Testversion"})
         # self.change_log.update({"Version": "V1.0 vom 10-02-2023", "ChangeLog": "Initialer Release"})

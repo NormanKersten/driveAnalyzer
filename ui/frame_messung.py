@@ -136,17 +136,17 @@ class MessungFrame(ttk.Frame):
                 for n in range(2, len(group_zyklus)):
                     messung.channels_zyklus.append(all_zyklus_channels[n].name)
                 # Schließen der TDMS-Datei
-                tdms_file.close()
-                # Statusbar auf ok setzen
-                self.controller.status_ok()
-                # Objekt der Messung als MessungInfo im Dictionary von root speichern
-                self.controller.messungen[messung.name] = messung
-                # Messung zum UI (Listbox) hinzufügen
-                # Listbox unselect, da sonst Fehler, weil aktuell nur ein Item selektiert sein darf
-                self.messung_liste.selection_clear(0, tk.END)
-                self.messung_liste.insert(tk.END, messung.name)
-                self.messung_liste.select_set("end")
-                self.messung_liste.event_generate("<<ListboxSelect>>")
+                # tdms_file.close()
+            # Statusbar auf ok setzen
+            self.controller.status_ok()
+            # Objekt der Messung als MessungInfo im Dictionary von root speichern
+            self.controller.messungen[messung.name] = messung
+            # Messung zum UI (Listbox) hinzufügen
+            # Listbox unselect, da sonst Fehler, weil aktuell nur ein Item selektiert sein darf
+            self.messung_liste.selection_clear(0, tk.END)
+            self.messung_liste.insert(tk.END, messung.name)
+            self.messung_liste.select_set("end")
+            self.messung_liste.event_generate("<<ListboxSelect>>")
 
         except FileNotFoundError:
             messagebox.showerror("Error", f"Die Datei {dateiname} wurde nicht gefunden oder konnte nicht "
