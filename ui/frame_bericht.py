@@ -82,7 +82,7 @@ class BerichtFrame(ttk.Frame):
         frm_kopf.rowconfigure(1, weight=0)
         lbl_messung = ttk.Label(frm_kopf, text="Messung:", width=9)
         lbl_messung.grid(column=0, row=0, padx=(0, 0), sticky="W")
-        lbl_messung_aktuell = ttk.Label(frm_kopf, anchor=tk.W, width=30, textvariable=self.messung_name,
+        lbl_messung_aktuell = ttk.Label(frm_kopf, anchor=tk.W, width=40, textvariable=self.messung_name,
                                         font=("Helvetica", 10, "bold"))
         lbl_messung_aktuell.grid(column=1, row=0, padx=(5, 20), sticky="W")
         lbl_testrig = ttk.Label(frm_kopf, text="Datenlogger:")
@@ -394,7 +394,7 @@ class BerichtFrame(ttk.Frame):
         deckblatt.line(w - w + 200, h - 60, w - 200, h - 60)
         # Nutzung der python PIL Image Bibliothek
         feig_logo = ImageReader(
-            Image.open("C:\\Users\\Familie_Kersten\\PycharmProjects\\driveAnalyzer\\resources\\feig_logo.png"))
+            Image.open("resources\\feig_logo.png"))
         # "resources\\feig_logo.png"
         # "C:\\Users\\Familie_Kersten\\PycharmProjects\\driveAnalyzer\\resources\\feig_logo.png"
         deckblatt.drawImage(feig_logo, 710, h - 120, width=100, preserveAspectRatio=True, mask="auto")
