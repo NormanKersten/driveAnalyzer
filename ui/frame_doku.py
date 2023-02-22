@@ -9,7 +9,7 @@ class DokuFrame(ttk.Frame):
         self.controller = controller
 
         # Relativer Pfad zum "resource"-Ordner, welcher mit dem Build erstellt wird
-        doku_datei = "C:\\Users\\Familie_Kersten\\PycharmProjects\\driveAnalyzer\\resources\\help.txt"
+        doku_datei = "resources\\help.txt"
         # resources\\help.txt
         # C:\\Users\\Familie_Kersten\\PycharmProjects\\driveAnalyzer\\resources\\help.txt
 
