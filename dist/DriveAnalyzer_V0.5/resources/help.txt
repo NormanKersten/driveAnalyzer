@@ -1,0 +1,71 @@
+1. Verwendungszweck der Anwendung
+---------------------------------------
+Die Anwendung "DriveAnalyzer" dient der Auswertung von Messdaten, welche an den DRIVE Antriebsprüfständen aufgezeichnet wurden.
+Es werden dabei Dateien im NI-TDMS Format verarbeitet.
+
+2. Messungen Öffnen, Anzeigen und Schließen
+---------------------------------------
+Unter "Datei -> Öffnen" kann eine TDMS-Datei ausgewählt und geöffnet werden.
+Während des Öffnens, was bei großen Dateien schon mal 15 ... 30 Minuten dauern kann, wird am unteren Ende des Fensters die Statusbar aktiviert.
+
+Nach dem Öffnen werden die wesentlichen Informationen (Anzahl Zyklen, Start der Messung, ...) aus der Messung gelesen und im Fenster "Messungen" angezeigt.
+Anschließend wird die Messung dann aus dem Speicher des Anwendungsrechners gelöscht, wobei die Informationen zu der Messung im Programm erhalten bleiben.
+
+Es besteht die Möglichkeit die aus der Messung geladenen Kommentare zu bearbeiten und als Textdatei zu speichern.
+Es können mehrere Messungen eingelesen und angezeigt werden.
+Die Anzeige der Informationen einer Messung ändert sich dann mit der Auswahl einer Messung in der Liste.
+
+Über "Datei -> Schließen" kann eine ausgewählte Messung geschlossen werden.
+
+2. Analyse von Messungen
+---------------------------------------
+Unter "Auswerten -> Analyse" wird in die Ansicht für die Analyse von Messdateien gewechselt.
+Es muss dabei eine Messung in der Ansicht "Messungen" ausgewählt sein, zu welcher dann Analysen durchgeführt werden sollen.
+
+Der (Datei)Name der Messung erscheint dann oben im Fenster und es werden in den Listen die in der Messdatei vorhandenen Messkanäle angezeigt.
+Zudem wird die Bereichsauswahl der Zyklen entsprechend der Zyklen der Messung voreingestellt.
+
+Bei der Analyse können grundsätzlich zwei Arten von Diagrammen erstellt werden:
+[a] Eine Analyse der Daten über den Zyklen -> In der Messung per Zyklus gespeicherte min/max Werte der Kanäle
+[b] Analyse der analogen Daten -> In der Messung per Messrate gespeicherte Werte der Kanäle
+
+Für die Auswertung der Zyklen [a] können die auszuwertenden Kanäle in der Liste ausgewählt werden. Die Auswahl von MIN/MAX soll dies erleichtern.
+Über den Schieberegler kann der auszuwählende Bereich eingestellt werden.
+Über die Schaltfläche "Diagramm erstellen" erfolgt dann die Erstellung der Diagramme, wobei je nach ausgewählter Messkanäle bis zu zwei Diagramme (Drehmoment/Drehzahl und Temperaturen) generiert und in separaten Fenstern angezeigt werden.
+
+Für die Generierung der Diagramme muss die Messdatei in den Speicher gelesen werden, was wiederum etwas dauert und durch die aktivierte Statusbar angezeigt wird.
+Während der Analyse werden die Schaltflächen "Diagramm erstellen" deaktiviert, um einen mehrfachen zeitgleichen Zugriff auf die Messdatei zu verhindern.
+
+Die angezeigten Diagramme werden nicht automatisch gespeichert. Der Benutzer kann die Diagramme aber im gewünschten Format aus dem Diagrammfenster heraus speichern.
+Die Fenster mit den Diagrammen können auch während dem Öffnen und Analysieren einer weiteren Messung geöffnet bleiben.
+
+Für die Auswertung der analogen Daten [b] müssen die Kanäle wieder in der Liste ausgewählt werden.
+Zudem können bis zu drei Auswertebereiche eingestellt werden, welche dann untereinander in einem Diagramm dargestellt werden.
+
+Die Anzahl der Diagramme ist wiederum abhängig von den gewählten Messkanälen (Drehmoment/Drehzahl und Temperaturen).
+
+3. Erstellung eines Berichtes
+---------------------------------------
+Zur Berichtserstellung gelangt man über "Auswerten -> Bericht", wobei zuvor eine Messung ausgewählt sein muss.
+
+Ziel der Berichterstellung ist eine standardisierte und automatische Erzeugung und Ablage eines Kurzberichtes inklusive Deckblatt und Diagrammen.
+Der Bericht wird dabei automatisch erzeugt und als PDF-Dokument im Verzeichnis der zuvor gewählten TDMS-Datei gespeichert.
+
+In der Ansicht für die Erstellung des Berichtes kann ein Projekt angegeben werden (z.B. TST DRA-Bx ...) und ein Antriebsprüfstand, auf welchem die Messung aufgezeichnet wurde, ausgewählt werden.
+Zudem kann eine kurze Beschreibung der Messung/Prüfung erfolgen.
+Bei der Beschreibung ist darauf zu achten, dass nach maximal zwei Zeilen ein Zeilenumbruch erfolgen muss und die Beschreibung insgesamt aus max. 10 Zeilenumbrüchen bestehen darf.
+Ansonsten passt der Inhalt eventuell nicht mehr auf das Deckblatt als "one-pager"
+
+Im unteren Bereich des Fensters kann noch ausgewählt werden, ob die TDMS-Datei anschließend (als ZIP) komprimiert und archiviert werden soll.
+Falls ausgewählt (Default="nein"), wird im Zielordner der TDMS-Datei ein Zip-Archiv mit dem gleichen Namen erzeugt und die TDMS-Datei anschließend gelöscht.
+
+Der Bericht besteht aus einem Deckblatt und weiteren Seiten mit Diagrammen für die Darstellung der Zyklen und der analogen Werte, für jeweils die ersten, mittleren und letzten drei Zyklen einer Messung.
+
+Für die Auswertung und Erstellung des Berichtes muss die TDMS-Datei komplett gelesen und verarbeitet werden, was bei großen Dateien recht lange (20 ... 45 Minuten) dauern kann!
+
+4. Einstellungen vornehmen
+---------------------------------------
+Die Ansicht für die Einstellungen wird über die Menüleiste "Auswerten -> Einstellungen" erreicht.
+
+Aktuell können dabei lediglich Einstellungen für den Bereich der Y-Achsen für die Analyse von Messdaten vorgenommen werden.
+Sollten die Standardwerte nicht passen, können diese verändert werden.
